@@ -10,9 +10,9 @@ export class Beacon {
      * @param {object} port a SerialPort object (https://developer.mozilla.org/en-US/docs/Web/API/SerialPort)
      * @param {int} id an id which will be displayed as `Beacon ${id}`, no other purpose
      * @param {Function} set_beacon_ids function to set beacon_ids (useState)
-     * @param {Function} set_beacons a function to set beacons (useState)
+     * @param {object} beacon_ids a useRef with a array of beacon ids (useRef)
      */
-    constructor(port, id, set_beacon_ids, set_beacons) {
+    constructor(port, id, beacon_ids, set_beacons) {
 
         this.port = port;
         this.readingFlag = false;
@@ -34,11 +34,8 @@ export class Beacon {
             set_beacons(prev => prev.filter(b => b.id !== this.id))
 
             //set this id in beacon ids to null - will be reused
-            set_beacon_ids(prev => {
-                const new_beacon_ids = [...prev]
-                new_beacon_ids[this.id-1] = null
-                return new_beacon_ids
-            })
+            beacon_ids.current[this.id-1] = null
+
         });
     }
 
@@ -78,20 +75,17 @@ export class Beacon {
     * @param {Function} set_connect_msg A useState function to show the update progress
     */
     async update(version, set_connect_msg) {
-        set_connect_msg("Checking Firmware Version...")
+        // set_connect_msg("Checking Firmware Version...")
         if (await this.checkVersion(version)) {
-            console.log(this.id, "has same version")
             return
         } else {
-            set_connect_msg("Uploading Firmware " + version + "...")
+            // set_connect_msg("Uploading Firmware " + version + "...")
             this.readingFlag = false
             await this.writer.close()
             await this.reader.cancel()
             this.writer = this.port.writable.getWriter();
             this.reader = this.port.readable.getReader();
             try {
-
-                console.log("writing")
 
                 const stk = new STK500(this.port, this.writer, this.reader, this.uploading_buffer);
                     
@@ -111,7 +105,6 @@ export class Beacon {
                 }
             
                 await stk.leaveProgrammingMode(); // Arduino will now run the new sketch
-                console.log("done!")
                 return
             } catch (err) {
                 console.log("uploading err:")

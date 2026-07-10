@@ -12,9 +12,9 @@ export default function Panel(params) {
 
         const interval = setInterval(() => {
             set_blink_bg(prev =>
-                prev === "bg-yellow-200 hover:bg-yellow-300"
+                prev === "bg-purple-300 hover:bg-purple-400"
                 ? "bg-gray-200 hover:bg-gray-300"
-                : "bg-yellow-200 hover:bg-yellow-300"
+                : "bg-purple-300 hover:bg-purple-400"
             )
         }, 500)
 

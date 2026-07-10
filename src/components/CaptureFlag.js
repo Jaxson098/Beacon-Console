@@ -25,8 +25,6 @@ export default function CaptureFlag(params) {
     useEffect(()=>{
         if (!params.running) {return}
 
-        console.log(minutes.current.value)
-
         const id = setInterval(() => {
             if (seconds.current.value > 0) {
                 seconds.current.value = seconds.current.value - 1;
@@ -46,7 +44,6 @@ export default function CaptureFlag(params) {
             for (const beacon of params.beacons) {
                 beacon.sendCmd("Stopped")
             }
-            console.log(start_minutes)
             minutes.current.value = start_minutes;
             seconds.current.value = start_seconds;
         }

@@ -107,11 +107,9 @@ export class STK500 {
   async sync(tries = 10) {
     for (let i = 0; i < tries; i++) {
       try {
-        console.log('synced on try', i);
         await this.sendCommand([GET_SYNC]);
         return; // success!
       } catch (err) {
-        console.log('sync attempt', i, 'failed:', err.message);
         // ignore and try again
       }
     }
