@@ -93,7 +93,7 @@ export class Beacon {
                 await stk.sync();                  // make sure it's listening
                 await stk.enterProgrammingMode();  // start a programming session
             
-                const response = await fetch('http://localhost:3000/Beacon-Console/Beacon.hex');
+                const response = await fetch('https://jaxson098.github.io/Beacon-Console/Beacon.hex');
                 const hexFileText = await response.text();
                 const bytes = hexToBytes(hexFileText);
                 const pages = splitIntoPages(bytes);
