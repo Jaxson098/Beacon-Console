@@ -75,7 +75,7 @@ function App() {
 
         beacon.startReading(set_global_buffer)
 
-        beacon.update("v0.1.3",set_connect_msg).then(()=>{
+        beacon.update("v0.1.3",set_connecting_stack).then(async ()=>{
 
           if (beacon.readingFlag == false) {beacon.startReading(set_global_buffer)}
 
@@ -85,15 +85,22 @@ function App() {
           else {beacon.sendCmd("Idle")}
 
           set_beacons(prev => [...prev, beacon]);
+
+          set_connecting_stack(prev => {
+            const copy = [...prev]
+            copy.pop()
+            return copy
+          })
+
         })
 
+      } else {
+        set_connecting_stack(prev => {
+          const copy = [...prev]
+          copy.pop()
+          return copy
+        })
       }
-      set_connecting_stack(prev => {
-        const copy = [...prev]
-        copy.pop()
-        return copy
-      })
-
     }
   }
 

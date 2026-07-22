@@ -72,13 +72,21 @@ export class Beacon {
     * Checks the current version of the Beacon and updates it to the newest firmware version
     * 
     * @param {string} version The newest firmware version (i.e "0.1.0")
-    * @param {Function} set_connect_msg A useState function to show the update progress
+    * @param {Function} set_connecting_stack A useState function to show the update progress
     */
-    async update(version, set_connect_msg) {
+    async update(version, set_connecting_stack) {
         // set_connect_msg("Checking Firmware Version...")
         if (await this.checkVersion(version)) {
             return
         } else {
+
+            set_connecting_stack(prev => {
+                const copy = [...prev]
+                copy.pop()
+                copy.push((<p className='text-xl text-gray-600 mt-3.5'>Uploading Firmware {version}</p>))
+                return copy
+            })
+
             // set_connect_msg("Uploading Firmware " + version + "...")
             this.readingFlag = false
             await this.writer.close()
@@ -105,6 +113,7 @@ export class Beacon {
                 }
             
                 await stk.leaveProgrammingMode(); // Arduino will now run the new sketch
+                await new Promise(resolve => setTimeout(resolve, 1500)); //wait to boot again
                 return
             } catch (err) {
                 console.log("uploading err:")
