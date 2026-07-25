@@ -8,20 +8,12 @@ export default function CaptureFlag(params) {
     const [start_minutes, set_start_minutes] = useState()
     const [start_seconds, set_start_seconds] = useState()
 
+    const tone = useRef(new Audio("https://jaxson098.github.io/Beacon-Console/tone.wav"))
+    const horn = useRef(new Audio("https://jaxson098.github.io/Beacon-Console/horn.wav"))
+    const speech = useRef(new Audio("https://jaxson098.github.io/Beacon-Console/speech.mp3"))
+
     const minutes = useRef(1)
     const seconds = useRef(30)
-
-    //old buffer based:
-    // useEffect(()=>{
-    //     if (params.running && params.global_buffer.length > 0) {
-    //         const count = params.global_buffer.length
-    //         for (const point of params.global_buffer) {
-    //             if (point.trim() === "Blue") {set_blue(prev => prev + 1)}
-    //             else if (point.trim() === "Red") {set_red(prev => prev + 1)}
-    //         }
-    //         params.set_global_buffer(prev => prev.slice(count))
-    //     }
-    // },[params.global_buffer])
 
     function updateScore() {
         let b = 0;
@@ -37,7 +29,6 @@ export default function CaptureFlag(params) {
         set_red(r)
     }
 
-    //new OOP based
     useEffect(()=>{
         if (params.running) {
             updateScore()
@@ -103,6 +94,7 @@ export default function CaptureFlag(params) {
                         set_start_minutes(minutes.current.value)
                         set_start_seconds(seconds.current.value)
                         params.set_running(true)
+                        tone.current.play()
                     }
                 }}>{params.running ? "Stop" : "Start"}</button>
 
@@ -128,6 +120,8 @@ export default function CaptureFlag(params) {
                 }}>Reset Field</button>
 
             </div>
+
+            <img className='w-1/6 mt-auto mr-auto mb-1 ml-1' src='https://jaxson098.github.io/Beacon-Console/logo-rectangle.png'></img>
     
         </div>
     )

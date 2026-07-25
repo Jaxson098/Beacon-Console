@@ -115,6 +115,8 @@ export default function WackMole(params) {
                 }}>Reset Points</button>
 
             </div>
+
+            <img className='w-1/6 mt-auto mr-auto mb-1 ml-1' src='https://jaxson098.github.io/Beacon-Console/logo-rectangle.png'></img>
     
         </div>
     )
