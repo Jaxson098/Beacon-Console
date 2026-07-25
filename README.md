@@ -2,7 +2,7 @@
 - Use the topbar to select the gamemode you wish to play
 - Click "**Connect Beacon**" and select a serial port from the popup menu - the newest firmware will automatically be uploaded
 - ensure the [Beacon](https://www.dronesinschool.com/product/Capture-the-Flag-Beacon) is connected via a [data and power Mini USB cable](https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1) - the one it came with will not work. You will probably need to use a [powered USB hub](https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1)
-- Once connected, "**Blink**" the Beacon to identify it - it will blink **$\color{purple}{\textsf{Purple}}$** - and change settings if applicable
+- Once connected, "**Blink**" the Beacon to identify it - it will blink ![Purple](https://img.shields.io/badge/-Purple-purple) - and change settings if applicable
 - Set the game length in a [minutes] : [seconds] format
 - When finished click "**Disconnect All**" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off
 
