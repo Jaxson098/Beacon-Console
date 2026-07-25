@@ -1,70 +1,23 @@
-# Getting Started with Create React App
+## General Usage
+- Use the topbar to select the gamemode you wish to play
+- Click "**Connect Beacon**" and select a serial port from the popup menu - the newest firmware will automatically be uploaded
+- ensure the [Beacon](https://www.dronesinschool.com/product/Capture-the-Flag-Beacon) is connected via a [data and power Mini USB cable](https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1) - the one it came with will not work. You will probably need to use a [powered USB hub](https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1)
+- Once connected, "**Blink**" the Beacon to identify it - it will blink 'Purple' - and change settings if applicable
+- Set the game length in a [minutes] : [seconds] format
+- When finished click "**Disconnect All**" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Gamemode: Capture The Flag
+- Use **Blink** to identify Beacons, and set half of them to **Start Blue** and the other half to **Start Red**
+- Once started, two teams try and set all Beacons to their color, either 'Red' or 'Blue'
+- A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.
+- After the game is over, Beacons will remain the same color unless **Reset Field** or **Start** is clicked
 
-## Available Scripts
+## Gamemode: Wack-A-Mole
+- Once started, 1 or more drones try to trigger the Beacon with the color 'Green' as fast as possible by flying over it.
+- Doing so will score 1 point and cause a different Beacon to turn green
+- The drone(s) will now have to trigger this new Beacon. This continues until the time is up.
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Gamemode: Altitude
+- Once started, 1 or more drones try to trigger all Beacons as fast as possible by flying over them at the correct altitude as designated by the Beacons color.
+- 'Yellow' indicates an altitude of 6 inches or less, 'Orange' indicates an altitude of 6-12 inches, and 'Red' indicates an altitude of 18 inches or more.
+- Successfully triggering a Beacon results in 1 point, once all Beacons are triggered they are assigned a new random height and must be triggered again. This continues until the time is up.

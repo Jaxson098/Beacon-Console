@@ -189,7 +189,7 @@ const CF_help_html = (
     <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
       <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
       <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
-      <li>changing the Color of a beacon by flying over it at an altitude of 8 inches or less scores 1 point. This continues until the time is up.</li>
+      <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
       <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
     </ul>
 
@@ -232,7 +232,7 @@ const WM_help_html = (
     <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
       <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
       <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
-      <li>changing the Color of a beacon by flying over it at an altitude of 8 inches or less scores 1 point. This continues until the time is up.</li>
+      <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
       <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
     </ul>
 
@@ -268,7 +268,7 @@ const A_help_html = (
     <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
       <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
       <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
-      <li>changing the Color of a beacon by flying over it at an altitude of 8 inches or less scores 1 point. This continues until the time is up.</li>
+      <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
       <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
     </ul>
 
