@@ -4,13 +4,39 @@ export default function WackMole(params) {
 
     const [points, set_points] = useState(0)
 
+    const [is_starting, set_is_starting] = useState(false)
+
     const [start_minutes, set_start_minutes] = useState()
     const [start_seconds, set_start_seconds] = useState()
+
+    const tone = useRef(new Audio("https://jaxson098.github.io/Beacon-Console/tone.wav"))
+    const horn = useRef(new Audio("https://jaxson098.github.io/Beacon-Console/horn.wav"))
+    const speech = useRef(new Audio("https://jaxson098.github.io/Beacon-Console/speech.mp3"))
 
     const minutes = useRef(1)
     const seconds = useRef(30)
 
     const [last_changed_id, set_last_changed_id] = useState(null)
+
+    async function start() {
+        if (minutes.current.value == "") {minutes.current.value = 1}
+        if (seconds.current.value == "") {seconds.current.value = 30}
+        set_start_minutes(minutes.current.value)
+        set_start_seconds(seconds.current.value)
+
+        const delay = (Math.random() * 4.5) + 0.5 //betwen 0.5 and 5
+
+        await speech.current.play()
+
+        await new Promise(resolve => setTimeout(resolve, 3000)); //3 second audio clip
+
+        await new Promise(resolve => setTimeout(resolve, delay*1000)); //random delay
+
+        //start
+        set_is_starting(false)
+        tone.current.play()
+        pick()
+    }
 
     function pick() {
         if (params.beacons.length != 0) {
@@ -39,7 +65,7 @@ export default function WackMole(params) {
     },[params.global_buffer])
 
     useEffect(()=>{
-        if (!params.running) {return}
+        if (!params.running || is_starting) {return}
 
         const id = setInterval(() => {
             if (seconds.current.value > 0) {
@@ -64,11 +90,11 @@ export default function WackMole(params) {
             seconds.current.value = start_seconds;
             set_last_changed_id(null)
         }
-    }, [params.running])
+    }, [params.running, is_starting])
 
     return(
-        <div className="w-full h-full flex-col flex px-4 py-5 items-center overflow-scroll">
-            <div className="flex justify-evenly w-full h-2/3">
+        <div className="w-full h-full flex-col flex px-4 items-center">
+            <div className="flex justify-evenly w-full h-2/3 mt-5">
                 <div className="rounded-xl flex bg-lime-600 w-2/5 border border-black items-center justify-center">
                     <p className="text-5xl lg:text-9xl">{points}</p>
                 </div>
@@ -76,7 +102,7 @@ export default function WackMole(params) {
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center justify-center mt-8 w-full">
 
-                <button className={`ml-auto w-32 flex flex-col items-center justify-center text-base lg:text-5xl border border-black px-3 py-1 rounded-lg transition-all ${params.running ? "bg-red-700 hover:bg-red-600" : "bg-green-700 hover:bg-green-600"}`} onClick={()=>{
+                <button disabled={is_starting} className={`ml-auto flex flex-col items-center justify-center text-base lg:text-5xl border border-black px-3 py-1 rounded-lg transition-all ${is_starting ? "bg-orange-600" : params.running ? "bg-red-700 hover:bg-red-600" : "bg-green-700 hover:bg-green-600"}`} onClick={()=>{
                     if (params.running) {
                         for (const beacon of params.beacons) {
                             beacon.sendCmd("Idle")
@@ -84,23 +110,20 @@ export default function WackMole(params) {
                         params.set_running(false)
                     }
                     else {
-                        set_points(0)
-                        if (minutes.current.value == "") {minutes.current.value = 1}
-                        if (seconds.current.value == "") {seconds.current.value = 30}
-                        set_start_minutes(minutes.current.value)
-                        set_start_seconds(seconds.current.value)
+                        set_is_starting(true)
                         params.set_running(true)
-                        pick()
+                        set_points(0)
+                        start()
                     }
-                }}>{params.running ? "Stop" : "Start"}</button>
+                }}>{is_starting ? "Wait..." : params.running ? "Stop" : "Start"}</button>
 
                 <div className="mx-10 justify-self-center flex items-center">
 
-                    <input ref={minutes} id="minutes" disabled={params.running} defaultValue="1" className={`rounded text-center flex w-16 border ${params.running ? "border-white" : "border-black"} text-base lg:text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" maxLength={60} onChange={(event)=>{
+                    <input ref={minutes} id="minutes" disabled={params.running} defaultValue="1" className={`rounded text-center flex w-8 lg:w-16 border ${params.running ? "border-white" : "border-black"} text-base lg:text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" maxLength={60} onChange={(event)=>{
                         if (event.target.value > 60) {event.target.value=60}
                     }}/>
                     <p className="text-base lg:text-5xl mx-1">:</p>
-                    <input ref={seconds} id="seconds" disabled={params.running} defaultValue="00" className={`rounded text-center flex w-16 border ${params.running ? "border-white" : "border-black"} text-base lg:text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" max={60} onChange={(event)=>{
+                    <input ref={seconds} id="seconds" disabled={params.running} defaultValue="00" className={`rounded text-center flex w-8 lg:w-16 border ${params.running ? "border-white" : "border-black"} text-base lg:text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" max={60} onChange={(event)=>{
                         if (event.target.value > 59) {event.target.value = 59;}
                     }}/>
 
@@ -116,7 +139,10 @@ export default function WackMole(params) {
 
             </div>
 
-            <img className='w-1/6 mt-auto mr-auto mb-1 ml-1' src='https://jaxson098.github.io/Beacon-Console/logo-rectangle.png'></img>
+            <div className="flex w-full mb-1 mt-auto mx-1">
+                <img className='w-1/6 mr-auto' src='https://jaxson098.github.io/Beacon-Console/logo-rectangle.png'></img>
+                <p className="mt-auto ml-auto text-sm">*Use audio for best experience</p>
+            </div>
     
         </div>
     )

@@ -5,6 +5,8 @@ export default function CaptureFlag(params) {
     const [blue, set_blue] = useState(0)
     const [red, set_red] = useState(0)
 
+    const [is_starting, set_is_starting] = useState(false)
+
     const [start_minutes, set_start_minutes] = useState()
     const [start_seconds, set_start_seconds] = useState()
 
@@ -14,6 +16,28 @@ export default function CaptureFlag(params) {
 
     const minutes = useRef(1)
     const seconds = useRef(30)
+
+    async function start() {
+        if (minutes.current.value == "") {minutes.current.value = 1}
+        if (seconds.current.value == "") {seconds.current.value = 30}
+        set_start_minutes(minutes.current.value)
+        set_start_seconds(seconds.current.value)
+
+        const delay = (Math.random() * 4.5) + 0.5 //betwen 0.5 and 5
+
+        await speech.current.play()
+
+        await new Promise(resolve => setTimeout(resolve, 3000)); //3 second audio clip
+
+        await new Promise(resolve => setTimeout(resolve, delay*1000)); //random delay
+
+        //start
+        for (const beacon of params.beacons) {
+            beacon.sendCmd("GM_Capture_Flag")
+        }
+        set_is_starting(false)
+        tone.current.play()
+    }
 
     function updateScore() {
         let b = 0;
@@ -36,7 +60,7 @@ export default function CaptureFlag(params) {
     },[params.global_buffer])
 
     useEffect(()=>{
-        if (!params.running) {return}
+        if (!params.running || is_starting) {return}
 
         const id = setInterval(() => {
             if (seconds.current.value > 0) {
@@ -48,6 +72,7 @@ export default function CaptureFlag(params) {
 
             if (seconds.current.value == 0 && minutes.current.value == 0) {
                 params.set_running(false)
+                horn.current.play()
             }
 
         },1000)
@@ -60,11 +85,11 @@ export default function CaptureFlag(params) {
             minutes.current.value = start_minutes;
             seconds.current.value = start_seconds;
         }
-    }, [params.running])
+    }, [params.running, is_starting])
 
     return(
-        <div className="w-full h-full flex-col flex px-4 py-5 items-center">
-            <div className="flex justify-evenly w-full h-2/3">
+        <div className="w-full h-full flex-col flex px-4 items-center">
+            <div className="flex justify-evenly w-full h-2/3 mt-5">
                 <div className="rounded-xl flex bg-blue-700 w-2/5 border border-black items-center justify-center">
                     <p className="text-5xl lg:text-9xl">{blue}</p>
                 </div>
@@ -75,7 +100,7 @@ export default function CaptureFlag(params) {
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center justify-center mt-8 w-full">
 
-                <button className={`ml-auto flex flex-col items-center justify-center text-base lg:text-5xl border border-black px-3 py-1 rounded-lg transition-all ${params.running ? "bg-red-700 hover:bg-red-600" : "bg-green-700 hover:bg-green-600"}`} onClick={()=>{
+                <button disabled={is_starting} className={`ml-auto flex flex-col items-center justify-center text-base lg:text-5xl border border-black px-3 py-1 rounded-lg transition-all ${is_starting ? "bg-orange-600" : params.running ? "bg-red-700 hover:bg-red-600" : "bg-green-700 hover:bg-green-600"}`} onClick={()=>{
                     if (params.running) {
                         for (const beacon of params.beacons) {
                             beacon.sendCmd("Stopped")
@@ -83,20 +108,16 @@ export default function CaptureFlag(params) {
                         params.set_running(false)
                     }
                     else {
+                        set_is_starting(true)
+                        params.set_running(true)
                         for (const beacon of params.beacons) {
                             if (beacon.CF_Start_Blue) {beacon.sendCmd("Capture_Flag_Start_Blue")}
                             else {beacon.sendCmd("Capture_Flag_Start_Red")}
-                            beacon.sendCmd("GM_Capture_Flag")
                         }
                         updateScore()
-                        if (minutes.current.value == "") {minutes.current.value = 1}
-                        if (seconds.current.value == "") {seconds.current.value = 30}
-                        set_start_minutes(minutes.current.value)
-                        set_start_seconds(seconds.current.value)
-                        params.set_running(true)
-                        tone.current.play()
+                        start()
                     }
-                }}>{params.running ? "Stop" : "Start"}</button>
+                }}>{is_starting ? "Wait..." : params.running ? "Stop" : "Start"}</button>
 
                 <div className="mx-10 justify-self-center flex items-center">
 
@@ -110,7 +131,7 @@ export default function CaptureFlag(params) {
 
                 </div>
 
-                <button hidden={params.running} disabled={params.running} className={`mr-auto flex flex-col items-center justify-center text-base lg:text-5xl border border-black bg-gray-200 ${params.running ? "" : "hover:bg-gray-300"} px-3 py-1 rounded-lg transition-all`} onClick={()=>{
+                <button disabled={params.running} className={`mr-auto flex flex-col items-center justify-center text-base lg:text-5xl border border-black bg-gray-200 ${params.running ? "" : "hover:bg-gray-300"} px-3 py-1 rounded-lg transition-all`} onClick={()=>{
                     for (const beacon of params.beacons) {
                         if (beacon.CF_Start_Blue) {beacon.sendCmd("Capture_Flag_Start_Blue"); beacon.CF_Is_Blue = true}
                         else {beacon.sendCmd("Capture_Flag_Start_Red"); beacon.CF_Is_Blue = false}
@@ -121,8 +142,11 @@ export default function CaptureFlag(params) {
 
             </div>
 
-            <img className='w-1/6 mt-auto mr-auto mb-1 ml-1' src='https://jaxson098.github.io/Beacon-Console/logo-rectangle.png'></img>
-    
+            <div className="flex w-full mb-1 mt-auto mx-1">
+                <img className='w-1/6 mr-auto' src='https://jaxson098.github.io/Beacon-Console/logo-rectangle.png'></img>
+                <p className="mt-auto ml-auto text-xs">*Use audio for best experience</p>
+            </div>
+
         </div>
     )
 }

@@ -11,6 +11,7 @@ function App() {
   const [beacons, set_beacons] = useState([])
   const beacon_ids = useRef([null]) //must always end with a null
   const [gamemode, set_gamemode] = useState("CF")
+  const gamemodeRef = useRef("CF")
   const [global_buffer, set_global_buffer] = useState([])
   const [beacon_panels, set_beacon_panels] = useState([])
   const [running, set_running] = useState(false)
@@ -19,6 +20,10 @@ function App() {
   const [connecting_stack, set_connecting_stack] = useState([])
   const [help_open, set_help_open] = useState(true)
   const [controls_open, set_controls_open] = useState(true)
+
+  useEffect(()=>{
+    gamemodeRef.current = gamemode
+  },[gamemode])
 
   useEffect(()=>{
     const beaconPanels = []
@@ -82,7 +87,7 @@ function App() {
 
           beacon.sendCmd("Stopped")
 
-          if (gamemode == "CF") {beacon.sendCmd("Capture_Flag_Start_Blue")}
+          if (gamemodeRef.current == "CF") {beacon.sendCmd("Capture_Flag_Start_Blue")}
           else {beacon.sendCmd("Idle")}
 
           set_beacons(prev => [...prev, beacon]);
@@ -182,6 +187,7 @@ const CF_help_html = (
       <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
       <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
       <li>Set the game length in a [minutes] : [seconds] format</li>
+      <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
       <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
     </ul>
 
@@ -218,6 +224,7 @@ const WM_help_html = (
       <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
       <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
       <li>Set the game length in a [minutes] : [seconds] format</li>
+      <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
       <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
     </ul>
 
@@ -254,6 +261,7 @@ const A_help_html = (
       <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
       <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
       <li>Set the game length in a [minutes] : [seconds] format</li>
+      <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
       <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
     </ul>
 

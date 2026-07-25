@@ -4,6 +4,7 @@
 - ensure the [Beacon](https://www.dronesinschool.com/product/Capture-the-Flag-Beacon) is connected via a [data and power Mini USB cable](https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1) - the one it came with will not work. You will probably need to use a [powered USB hub](https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1)
 - Once connected, "**Blink**" the Beacon to identify it - it will blink `Purple` - and change settings if applicable
 - Set the game length in a [minutes] : [seconds] format
+- When "**Start**" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "**Stop**" is clicked.
 - When finished click "**Disconnect All**" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off
 
 ## Gamemode: Capture The Flag
