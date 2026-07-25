@@ -23,20 +23,22 @@ export default function Panel(params) {
 
     return (
         <div className="flex flex-col items-start px-2 py-1 rounded-lg w-fit bg-gray-100 border border-black">
-            <h3 className="text-xl">Beacon {params.beacon.id}</h3>
+            <h3 className="text-base lg:text-xl">Beacon {params.beacon.id}</h3>
             <div className="flex gap-2">
-                <button className={`border border-black px-2 rounded-md ${blink_bg} transition-all`} onClick={()=>{
+                <button className={`text-sm lg:text-base border border-black px-2 rounded-md ${blink_bg} transition-all`} onClick={()=>{
                     if (blinking == false) {params.beacon.sendCmd("Start_Blink"); set_blinking(true)}
                     else if (blinking == true) {params.beacon.sendCmd("Stop_Blink"); set_blinking(false)}
                 }}>{blinking ? "Blinking" : "Blink"}</button>
 
-                <select className={`border border-black px-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-all ${params.gamemode == "CF" ? "" : "hidden"}`} onChange={(event)=>{
+                <select className={`text-sm lg:text-base border border-black px-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-all ${params.gamemode == "CF" ? "" : "hidden"}`} onChange={(event)=>{
                     if (event.target.value == "blue") {
                         params.beacon.sendCmd("Capture_Flag_Start_Blue")
                         params.beacon.CF_Start_Blue = true;
+                        params.beacon.CF_Is_Blue = true;
                     } else if (event.target.value == "red") {
                         params.beacon.sendCmd("Capture_Flag_Start_Red")
                         params.beacon.CF_Start_Blue = false;
+                        params.beacon.CF_Is_Blue = false;
                     }
                 }}>
                     <option value="blue">Start Blue</option>

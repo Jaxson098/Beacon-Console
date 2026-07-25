@@ -9,10 +9,11 @@ export class Beacon {
      * 
      * @param {object} port a SerialPort object (https://developer.mozilla.org/en-US/docs/Web/API/SerialPort)
      * @param {int} id an id which will be displayed as `Beacon ${id}`, no other purpose
-     * @param {Function} set_beacon_ids function to set beacon_ids (useState)
      * @param {object} beacon_ids a useRef with a array of beacon ids (useRef)
+     * @param {Function} set_beacon_ids function to set beacon_ids (useState)
+     * @param {Function} set_global_buffer A method to set the global buffer
      */
-    constructor(port, id, beacon_ids, set_beacons) {
+    constructor(port, id, beacon_ids, set_beacons, set_global_buffer) {
 
         this.port = port;
         this.readingFlag = false;
@@ -25,6 +26,7 @@ export class Beacon {
         this.uploading_buffer = { value: null };
 
         this.CF_Start_Blue = true;
+        this.CF_Is_Blue = true;
         this.Blinking = false;
         this.id = id;
 
@@ -35,6 +37,11 @@ export class Beacon {
 
             //set this id in beacon ids to null - will be reused
             beacon_ids.current[this.id-1] = null
+
+            //put dissconect msg in buffer
+            set_global_buffer(prev => {
+                return [...prev, "disconnect"];
+            });
 
         });
     }
@@ -149,6 +156,11 @@ export class Beacon {
                     set_global_buffer(prev => {
                         return [...prev, line];
                     });
+                    if (line.trim() === "Blue") {
+                        this.CF_Is_Blue = true
+                    } else if (line.trim() === "Red") {
+                        this.CF_Is_Blue = false
+                    }
                 }
                 buffer = ""
             }

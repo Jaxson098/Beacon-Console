@@ -18,6 +18,7 @@ function App() {
   const [connect_msg, set_connect_msg] = useState("Connect Beacon")
   const [connecting_stack, set_connecting_stack] = useState([])
   const [help_open, set_help_open] = useState(true)
+  const [controls_open, set_controls_open] = useState(true)
 
   useEffect(()=>{
     const beaconPanels = []
@@ -71,7 +72,7 @@ function App() {
 
         console.log("beaconId",beaconId)
 
-        const beacon = new Beacon(port, beaconId, beacon_ids, set_beacons)
+        const beacon = new Beacon(port, beaconId, beacon_ids, set_beacons, set_global_buffer)
 
         beacon.startReading(set_global_buffer)
 
@@ -130,37 +131,41 @@ function App() {
 
       <button onClick={()=>{set_help_open(!help_open)}} className='mt-1 ml-auto mr-5 underline'>{help_open ? ">" : "<"} Help</button>
 
-      <div className='flex h-2/3 w-full'>
-        <div className={`flex flex-1 items-center justify-center border border-black ${help_open ? "ml-5 mr-2.5" : "mx-5"} mt-1 mb-2.5 overflow-scroll`}>
+      <div className='flex flex-1 min-h-0 w-full'>
+        <div className={`flex flex-1 items-center justify-center border border-black ${help_open ? "ml-5 mr-2.5" : "mx-5"} mt-1 overflow-hidden`}>
           {gamemode == "CF" ? (<CaptureFlag beacons={beacons} global_buffer={global_buffer} set_global_buffer={set_global_buffer} running={running} set_running={set_running}/>) :
           gamemode == "WM" ? (<WackMole beacons={beacons} global_buffer={global_buffer} set_global_buffer={set_global_buffer} running={running} set_running={set_running}/>) : 
           (<Altitude beacons={beacons} global_buffer={global_buffer} set_global_buffer={set_global_buffer} running={running} set_running={set_running}/>)}
         </div>
 
-          {help_open && (
-            <div className='flex w-[calc(33.333333%-30px)] ml-2.5 mr-5 mt-1 mb-2.5 border border-black px-5 py-2.5 overflow-scroll'>
-              {gamemode == "CF" ? (CF_help_html) :
-              gamemode == "WM" ? (WM_help_html) : 
-              (A_help_html)}
-            </div>
-          )}
+        {help_open && (
+          <div className='flex min-h-0 w-[calc(33.333333%-30px)] ml-2.5 mr-5 mt-1 border border-black px-5 py-2.5 overflow-y-auto'>
+            {gamemode == "CF" ? (CF_help_html) :
+            gamemode == "WM" ? (WM_help_html) : 
+            (A_help_html)}
+          </div>
+        )}
 
       </div>
 
-      <div className='px-4 flex flex-col'>
+      <button onClick={()=>{set_controls_open(!controls_open)}} className='my-1 ml-auto mr-5 underline'>{controls_open ? <span className='inline-block rotate-90'>{">"}</span> : <span className='inline-block rotate-90'>{"<"}</span>} Beacon Controls</button>
 
-        <div className='grid grid-cols-3 mb-2'>
-          <h2 className='text-lg font-bold justify-self-center'>{beacon_panels.length} Connected Beacons</h2>
-          <button className={`border border-black px-2 rounded-md bg-gray-200 ${running ? "" : "hover:bg-gray-300"} transition-all justify-self-center`} onClick={handleConnect} disabled={connecting || running}>{connect_msg}</button>
-          <button className={`border border-black px-2 rounded-md bg-gray-200 ${running ? "" : "hover:bg-gray-300"} transition-all justify-self-center`} onClick={closeAll} disabled={running}>Disconnect All</button>
+      {controls_open &&
+        <div className='mx-5 mb-5 px-4 py-2.5 h-1/4 flex flex-col border border-black overflow-y-auto'>
+
+          <div className='grid grid-cols-3 mb-2.5'>
+            <h2 className='text-sm lg:text-lg font-bold justify-self-center'>{beacon_panels.length} Connected Beacons</h2>
+            <button className={`text-sm lg:text-lg border border-black px-2 rounded-md bg-gray-200 ${running ? "" : "hover:bg-gray-300"} transition-all justify-self-center`} onClick={handleConnect} disabled={connecting || running}>{connect_msg}</button>
+            <button className={`text-sm lg:text-lg border border-black px-2 rounded-md bg-gray-200 ${running ? "" : "hover:bg-gray-300"} transition-all justify-self-center`} onClick={closeAll} disabled={running}>Disconnect All</button>
+          </div>
+
+          <div className='flex flex-wrap gap-4'>
+            {beacon_panels}
+            {connecting_stack}
+          </div>
+
         </div>
-
-        <div className='flex flex-wrap gap-4'>
-          {beacon_panels}
-          {connecting_stack}
-        </div>
-
-      </div>
+      }
 
     </div>
   );

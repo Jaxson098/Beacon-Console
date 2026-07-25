@@ -114,13 +114,13 @@ export default function Altitude(params) {
         <div className="w-full h-full flex-col flex px-4 py-5 items-center overflow-scroll">
             <div className="flex justify-evenly w-full h-2/3">
                 <div className="rounded-xl flex bg-orange-400 w-2/5 border border-black items-center justify-center">
-                    <p className="text-9xl">{points}</p>
+                    <p className="text-5xl lg:text-9xl">{points}</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center justify-center mt-8 w-full">
 
-                <button className={`ml-auto w-32 flex flex-col items-center justify-center text-5xl border border-black px-3 py-1 rounded-lg transition-all ${params.running ? "bg-red-700 hover:bg-red-600" : "bg-green-700 hover:bg-green-600"}`} onClick={()=>{
+                <button className={`ml-auto w-32 flex flex-col items-center justify-center text-base lg:text-5xl border border-black px-3 py-1 rounded-lg transition-all ${params.running ? "bg-red-700 hover:bg-red-600" : "bg-green-700 hover:bg-green-600"}`} onClick={()=>{
                     if (params.running) {
                         for (const beacon of params.beacons) {
                             beacon.sendCmd("Idle")
@@ -140,17 +140,17 @@ export default function Altitude(params) {
 
                 <div className="mx-10 justify-self-center flex items-center">
 
-                    <input ref={minutes} id="minutes" disabled={params.running} defaultValue={1} className={`rounded text-center flex w-16 border ${params.running ? "border-white" : "border-black"} text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" maxLength={60} onChange={(event)=>{
+                    <input ref={minutes} id="minutes" disabled={params.running} defaultValue="1" className={`rounded text-center flex w-16 border ${params.running ? "border-white" : "border-black"} text-base lg:text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" maxLength={60} onChange={(event)=>{
                         if (event.target.value > 60) {event.target.value=60}
                     }}/>
-                    <p className="text-5xl mx-1">:</p>
-                    <input ref={seconds} id="seconds" disabled={params.running} defaultValue={30} className={`rounded text-center flex w-16 border ${params.running ? "border-white" : "border-black"} text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" max={60} onChange={(event)=>{
+                    <p className="text-base lg:text-5xl mx-1">:</p>
+                    <input ref={seconds} id="seconds" disabled={params.running} defaultValue="00" className={`rounded text-center flex w-16 border ${params.running ? "border-white" : "border-black"} text-base lg:text-5xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} type="number" pattern="\d{1,2}" max={60} onChange={(event)=>{
                         if (event.target.value > 59) {event.target.value = 59;}
                     }}/>
 
                 </div>
 
-                <button hidden={params.running} disabled={params.running} className={`mr-auto flex flex-col items-center justify-center text-5xl border border-black bg-gray-200 ${params.running ? "" : "hover:bg-gray-300"} px-3 py-1 rounded-lg transition-all`} onClick={()=>{
+                <button hidden={params.running} disabled={params.running} className={`mr-auto flex flex-col items-center justify-center text-base lg:text-5xl border border-black bg-gray-200 ${params.running ? "" : "hover:bg-gray-300"} px-3 py-1 rounded-lg transition-all`} onClick={()=>{
                     for (const beacon of params.beacons) {
                         beacon.sendCmd("Idle")
                     }
