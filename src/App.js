@@ -81,7 +81,7 @@ function App() {
 
         beacon.startReading(set_global_buffer)
 
-        beacon.update("v0.1.4",set_connecting_stack).then(async ()=>{
+        beacon.update("v0.1.5",set_connecting_stack).then(async ()=>{
 
           if (beacon.readingFlag == false) {beacon.startReading(set_global_buffer)}
 
@@ -199,6 +199,7 @@ const help_html = (
         <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
         <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
         <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
+        <li>There is a 5 second delay after a Beacon has been triggered until it can be triggered again, this prevents a drone from accidentally triggering a beacon twice.</li>
         <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
       </ul>
     </details>
@@ -207,7 +208,7 @@ const help_html = (
       <summary className='font-bold cursor-pointer'>Gamemode: Wack-A-Mole</summary>
       <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
         <li>Once started, 1 or more drones try to trigger the Beacon with the color <span className='bg-lime-500 px-1'>Green</span> as fast as possible by flying over it.</li>
-        <li>Doing so will score 1 point and cause a different Beacon to turn green</li>
+        <li>Doing so will score 1 point and cause a different Beacon to turn green.</li>
         <li>The drone(s) will now have to trigger this new Beacon. This continues until the time is up.</li>
       </ul>
     </details>
