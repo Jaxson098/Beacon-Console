@@ -81,7 +81,7 @@ function App() {
 
         beacon.startReading(set_global_buffer)
 
-        beacon.update("v0.1.3",set_connecting_stack).then(async ()=>{
+        beacon.update("v0.1.4",set_connecting_stack).then(async ()=>{
 
           if (beacon.readingFlag == false) {beacon.startReading(set_global_buffer)}
 
@@ -145,9 +145,7 @@ function App() {
 
         {help_open && (
           <div className='flex min-h-0 w-[calc(33.333333%-30px)] ml-2.5 mr-5 mt-1 border border-black px-5 py-2.5 overflow-y-auto'>
-            {gamemode == "CF" ? (CF_help_html) :
-            gamemode == "WM" ? (WM_help_html) : 
-            (A_help_html)}
+            {help_html}
           </div>
         )}
 
@@ -178,113 +176,49 @@ function App() {
 
 export default App;
 
-const CF_help_html = (
+const help_html = (
   <div className='flex flex-col gap-1'>
-    <h2 className='font-bold'>General Usage</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Use the topbar to select the gamemode you wish to play</li>
-      <li>Click "<span className='font-bold'>Connect Beacon</span>" and select a serial port from the popup menu - the newest firmware will automatically be uploaded</li>
-      <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
-      <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
-      <li>Set the game length in a [minutes] : [seconds] format</li>
-      <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
-      <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
-    </ul>
+    <details>
+      <summary className='font-bold cursor-pointer'>General Usage (Please Read)</summary>
+      <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
+        <li>Chrome version 89 or newer is only the officially supported browser (though others may work). Check your browser and version <a href='https://www.whatismybrowser.com/' className='underline'>here</a></li>
+        <li>Please report all bugs <a href='https://forms.gle/djs4Cv6Lkdc81wn27' className='underline'>here</a></li>
+        <li>Use the topbar to select the gamemode you wish to play</li>
+        <li>Click "<span className='font-bold'>Connect Beacon</span>" and select a serial port from the popup menu - the newest firmware will automatically be uploaded</li>
+        <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
+        <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
+        <li>Set the game length in a [minutes] : [seconds] format</li>
+        <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
+        <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
+      </ul>
+    </details>
 
-    <h2 className='font-bold mt-4'>Gamemode: Capture The Flag</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
-      <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
-      <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
-      <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
-    </ul>
+    <details className='mt-4'>
+      <summary className='font-bold cursor-pointer'>Gamemode: Capture The Flag</summary>
+      <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
+        <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
+        <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
+        <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
+        <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
+      </ul>
+    </details>
 
-    <h2 className='font-bold mt-4'>Gamemode: Wack-A-Mole</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Once started, 1 or more drones try to trigger the Beacon with the color <span className='bg-lime-500 px-1'>Green</span> as fast as possible by flying over it.</li>
-      <li>Doing so will score 1 point and cause a different Beacon to turn green</li>
-      <li>The drone(s) will now have to trigger this new Beacon. This continues until the time is up.</li>
-    </ul>
+    <details className='mt-4'>
+      <summary className='font-bold cursor-pointer'>Gamemode: Wack-A-Mole</summary>
+      <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
+        <li>Once started, 1 or more drones try to trigger the Beacon with the color <span className='bg-lime-500 px-1'>Green</span> as fast as possible by flying over it.</li>
+        <li>Doing so will score 1 point and cause a different Beacon to turn green</li>
+        <li>The drone(s) will now have to trigger this new Beacon. This continues until the time is up.</li>
+      </ul>
+    </details>
 
-    <h2 className='font-bold mt-4'>Gamemode: Altitude</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Once started, 1 or more drones try to trigger all Beacons as fast as possible by flying over them at the correct altitude as designated by the Beacons color.</li>
-      <li><span className='bg-yellow-300 px-1'>Yellow</span> indicates an altitude of 6 inches or less, <span className='bg-orange-400 px-1'>Orange</span> indicates an altitude of 6-12 inches, and <span className='bg-red-500 px-1'>Red</span> indicates an altitude of 18 inches or more.</li>
-      <li>Successfully triggering a Beacon results in 1 point, once all Beacons are triggered they are assigned a new random height and must be triggered again. This continues until the time is up.</li>
-    </ul>
-  </div>
-)
-
-const WM_help_html = (
-  <div className='flex flex-col gap-1'>
-    <h2 className='font-bold'>General Usage</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Use the topbar to select the gamemode you wish to play</li>
-      <li>Click "<span className='font-bold'>Connect Beacon</span>" and select a serial port from the popup menu - the newest firmware will automatically be uploaded</li>
-      <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
-      <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
-      <li>Set the game length in a [minutes] : [seconds] format</li>
-      <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
-      <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
-    </ul>
-
-    <h2 className='font-bold mt-4'>Gamemode: Wack-A-Mole</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Once started, 1 or more drones try to trigger the Beacon with the color <span className='bg-lime-500 px-1'>Green</span> as fast as possible by flying over it.</li>
-      <li>Doing so will score 1 point and cause a different Beacon to turn green</li>
-      <li>The drone(s) will now have to trigger this new Beacon. This continues until the time is up.</li>
-    </ul>
-
-    <h2 className='font-bold mt-4'>Gamemode: Capture The Flag</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
-      <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
-      <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
-      <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
-    </ul>
-
-    <h2 className='font-bold mt-4'>Gamemode: Altitude</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Once started, 1 or more drones try to trigger all Beacons as fast as possible by flying over them at the correct altitude as designated by the Beacons color.</li>
-      <li><span className='bg-yellow-300 px-1'>Yellow</span> indicates an altitude of 6 inches or less, <span className='bg-orange-400 px-1'>Orange</span> indicates an altitude of 6-12 inches, and <span className='bg-red-500 px-1'>Red</span> indicates an altitude of 18 inches or more.</li>
-      <li>Successfully triggering a Beacon results in 1 point, once all Beacons are triggered they are assigned a new random height and must be triggered again. This continues until the time is up.</li>
-    </ul>
-  </div>
-)
-
-const A_help_html = (
-  <div className='flex flex-col gap-1'>
-    <h2 className='font-bold'>General Usage</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Use the topbar to select the gamemode you wish to play</li>
-      <li>Click "<span className='font-bold'>Connect Beacon</span>" and select a serial port from the popup menu - the newest firmware will automatically be uploaded</li>
-      <li>ensure the <a href='https://www.dronesinschool.com/product/Capture-the-Flag-Beacon' className='underline'>Beacon</a> is connected via a <a href='https://www.amazon.com/Amazon-Basics-Charging-Transfer-Gold-Plated/dp/B00NH11N5A?th=1' className='underline'>data and power Mini USB cable</a> - the one it came with will not work. You will probably need to use a <a href='https://www.amazon.com/AmazonBasics-USB-10-Port-Adapter-Black/dp/B07V6MXF3C?th=1&psc=1' className='underline'>powered USB hub</a></li>
-      <li>Once connected, "<span className='font-bold'>Blink</span>" the Beacon to identify it - it will blink <span className='bg-purple-500 px-1'>Purple</span> - and change settings if applicable</li>
-      <li>Set the game length in a [minutes] : [seconds] format</li>
-      <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
-      <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
-    </ul>
-
-    <h2 className='font-bold mt-4'>Gamemode: Altitude</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Once started, 1 or more drones try to trigger all Beacons as fast as possible by flying over them at the correct altitude as designated by the Beacons color.</li>
-      <li><span className='bg-yellow-300 px-1'>Yellow</span> indicates an altitude of 6 inches or less, <span className='bg-orange-400 px-1'>Orange</span> indicates an altitude of 6-12 inches, and <span className='bg-red-500 px-1'>Red</span> indicates an altitude of 18 inches or more.</li>
-      <li>Successfully triggering a Beacon results in 1 point, once all Beacons are triggered they are assigned a new random height and must be triggered again. This continues until the time is up.</li>
-    </ul>
-
-    <h2 className='font-bold mt-4'>Gamemode: Capture The Flag</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Use <span className='font-bold'>Blink</span> to identify Beacons, and set half of them to <span className='font-bold'>Start Blue</span> and the other half to <span className='font-bold'>Start Red</span></li>
-      <li>Once started, two teams try and set all Beacons to their color, either <span className='bg-red-500 px-1'>Red</span> or <span className='bg-blue-500 px-1'>Blue</span></li>
-      <li>A Beacons color may be changed by flying over at an altitude of 8 inches or less. The change will be reflected on the scoreboard. This continues until the time is up.</li>
-      <li>After the game is over, Beacons will remain the same color unless <span className='font-bold'>Reset Field</span> or <span className='font-bold'>Start</span> is clicked</li>
-    </ul>
-
-    <h2 className='font-bold mt-4'>Gamemode: Wack-A-Mole</h2>
-    <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
-      <li>Once started, 1 or more drones try to trigger the Beacon with the color <span className='bg-lime-500 px-1'>Green</span> as fast as possible by flying over it.</li>
-      <li>Doing so will score 1 point and cause a different Beacon to turn green</li>
-      <li>The drone(s) will now have to trigger this new Beacon. This continues until the time is up.</li>
-    </ul>
+    <details className='mt-4'>
+      <summary className='font-bold cursor-pointer'>Gamemode: Altitude</summary>
+      <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
+        <li>Once started, 1 or more drones try to trigger all Beacons as fast as possible by flying over them at the correct altitude as designated by the Beacons color.</li>
+        <li><span className='bg-yellow-300 px-1'>Yellow</span> indicates an altitude of 6 inches or less, <span className='bg-orange-400 px-1'>Orange</span> indicates an altitude of 6-12 inches, and <span className='bg-red-500 px-1'>Red</span> indicates an altitude of 18 inches or more.</li>
+        <li>Successfully triggering a Beacon results in 1 point, once all Beacons are triggered they are assigned a new random height and must be triggered again. This continues until the time is up.</li>
+      </ul>
+    </details>
   </div>
 )
