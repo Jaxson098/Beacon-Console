@@ -81,7 +81,7 @@ function App() {
 
         beacon.startReading(set_global_buffer)
 
-        beacon.update("v0.1.5",set_connecting_stack).then(async ()=>{
+        beacon.update("v0.1.6",set_connecting_stack).then(async ()=>{
 
           if (beacon.readingFlag == false) {beacon.startReading(set_global_buffer)}
 
