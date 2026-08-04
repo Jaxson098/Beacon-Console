@@ -41,6 +41,7 @@ function App() {
       beacon.port.close()
     }
     set_beacons([])
+    window.location.reload()
   }
 
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
