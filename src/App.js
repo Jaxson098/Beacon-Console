@@ -28,10 +28,10 @@ function App() {
   useEffect(()=>{
     const beaconPanels = []
     for (const beacon of beacons) {
-      beaconPanels.push(<Panel key={beacon.id} beacon={beacon} gamemode={gamemode} running={running}/>)
+      beaconPanels.push(<Panel key={beacon.id} beacon={beacon} gamemode={gamemode} running={running} set_global_buffer={set_global_buffer}/>)
     }
     set_beacon_panels(beaconPanels)
-  },[beacons, gamemode])
+  },[beacons, gamemode, running])
 
   async function closeAll() {
     set_beacon_panels([])

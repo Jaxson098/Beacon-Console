@@ -30,15 +30,21 @@ export default function Panel(params) {
                     else if (blinking == true) {params.beacon.sendCmd("Stop_Blink"); set_blinking(false)}
                 }}>{blinking ? "Blinking" : "Blink"}</button>
 
-                <select className={`text-sm lg:text-base border border-black px-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-all ${params.gamemode == "CF" ? "" : "hidden"}`} onChange={(event)=>{
+                <select disabled={params.running} className={`text-sm lg:text-base border border-black px-2 rounded-md bg-gray-200 ${params.running ? "" : "hover:bg-gray-300"} transition-all ${params.gamemode == "CF" ? "" : "hidden"}`} onChange={(event)=>{
                     if (event.target.value == "blue") {
                         params.beacon.sendCmd("Capture_Flag_Start_Blue")
                         params.beacon.CF_Start_Blue = true;
                         params.beacon.CF_Is_Blue = true;
+                        params.set_global_buffer(prev => {
+                            return [...prev, 'changed_starting_color'];
+                        });
                     } else if (event.target.value == "red") {
                         params.beacon.sendCmd("Capture_Flag_Start_Red")
                         params.beacon.CF_Start_Blue = false;
                         params.beacon.CF_Is_Blue = false;
+                        params.set_global_buffer(prev => {
+                            return [...prev, 'changed_starting_color'];
+                        });
                     }
                 }}>
                     <option value="blue">Start Blue</option>

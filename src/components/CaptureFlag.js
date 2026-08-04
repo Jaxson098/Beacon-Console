@@ -54,10 +54,12 @@ export default function CaptureFlag(params) {
     }
 
     useEffect(()=>{
-        if (params.running) {
-            updateScore()
-        }
+        updateScore()
     },[params.global_buffer])
+
+    useEffect(()=>{
+        updateScore()
+    },[params.beacons])
 
     useEffect(()=>{
         if (!params.running || is_starting) {return}
@@ -136,8 +138,7 @@ export default function CaptureFlag(params) {
                         if (beacon.CF_Start_Blue) {beacon.sendCmd("Capture_Flag_Start_Blue"); beacon.CF_Is_Blue = true}
                         else {beacon.sendCmd("Capture_Flag_Start_Red"); beacon.CF_Is_Blue = false}
                     }
-                    set_blue(0)
-                    set_red(0)
+                    updateScore()
                 }}>Reset Field</button>
 
             </div>
