@@ -37,8 +37,12 @@ function App() {
     set_beacon_panels([])
     beacon_ids.current=[null]
     for (const beacon of beacons) {
-      await beacon.sendCmd("Disconnect")
-      beacon.port.close()
+      try {
+        await beacon.sendCmd("Disconnect")
+        beacon.port.close()
+      } catch (err){
+        console.log(err)
+      }    
     }
     set_beacons([])
     window.location.reload()

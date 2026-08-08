@@ -45,7 +45,7 @@ export default function CaptureFlag(params) {
         for (const beacon of params.beacons) {
             if (beacon.CF_Is_Blue) {
                 b++
-            } else {
+            } else if (!beacon.CF_Is_Blue) {
                 r++
             }
         }
