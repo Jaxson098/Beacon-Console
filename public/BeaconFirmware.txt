@@ -1,0 +1,291 @@
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+#include <avr/power.h>  // Required for 16 MHz Adafruit Trinket
+#endif
+
+#define LED_COUNT 14
+#define LED_PIN 2
+
+char version[] = "v0.1.6";
+
+const int trigPin = 3;  //UltraSonic Triger Pin
+const int echoPin = 4;  //UltraSonic Echo Pin
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+
+float distance = 0;
+unsigned long lastChanged;
+bool CF_Is_Blue = true;
+bool CF_Done_Changing = true;
+bool CF_Done_Delay = true;
+
+int A_Height;
+
+bool Blinking = false;
+unsigned long lastBlinked;
+
+const int MAX_LENGH = 32;
+char lastRecived[MAX_LENGH + 1];
+char gameMode[MAX_LENGH + 1] = "Unconnected";
+int charIndex = 0;
+
+void setup() {
+  Serial.begin(57600);
+  strip.begin();             // INITIALIZE NeoPixel strip object
+  strip.show();              // Turn OFF all pixels ASAP
+  strip.setBrightness(255);  //set brightness
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  colorWipeNoDelay(strip.Color(0, 0, 255));
+}
+
+void getDistance() {
+  float echoTime;
+  float calculatedDistance;
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  echoTime = pulseIn(echoPin, HIGH);
+  calculatedDistance = echoTime / 148.0;
+  distance = calculatedDistance;
+}
+
+int pixelIndex = 0;
+void colorWipe(uint32_t color, unsigned long currentTime) {
+  if (pixelIndex < strip.numPixels() && currentTime - lastChanged >= 50) {
+    strip.setPixelColor(pixelIndex, color);
+    strip.show();
+    pixelIndex += 1;
+  } else if (pixelIndex >= strip.numPixels()) {
+    CF_Done_Changing = true;
+    pixelIndex = 0;
+  }
+  if (currentTime - lastChanged >= 5000) {
+    CF_Done_Delay = true;
+  }
+}
+
+bool BlinkOn = false;
+void blink(uint32_t color, unsigned long currentTime) {
+  if (currentTime - lastBlinked >= 500) {
+
+    if (!BlinkOn) {
+      for (int i = 0; i < (strip.numPixels() / 2); i++) {
+        strip.setPixelColor(i, color);
+      }
+      strip.show();
+      BlinkOn = true;
+    }
+
+    else {
+      blinkOff();
+    }
+
+    lastBlinked = millis();
+  }
+}
+
+void blinkOff() {
+  if (strcmp(gameMode, "Idle") == 0) {
+    for (int i = 0; i < (strip.numPixels() / 2); i++) {
+      strip.setPixelColor(i, strip.Color(255, 255, 255));
+    }
+  }
+
+  else if(strcmp(gameMode, "Wack_A_Mole") == 0) {
+    for (int i = 0; i < (strip.numPixels() / 2); i++) {
+      strip.setPixelColor(i, strip.Color(0, 255, 0));
+    }
+  }
+
+  else if (strcmp(gameMode, "Altitude") == 0) {
+
+    if (A_Height == 18) {
+      for (int i = 0; i < (strip.numPixels() / 2); i++) {
+        strip.setPixelColor(i, strip.Color(255, 0, 0));
+      }
+    } else if (A_Height == 12) {
+      for (int i = 0; i < (strip.numPixels() / 2); i++) {
+        strip.setPixelColor(i, strip.Color(255, 76, 0));
+      }
+    } else if (A_Height == 6) {
+      for (int i = 0; i < (strip.numPixels() / 2); i++) {
+        strip.setPixelColor(i, strip.Color(255, 153, 0));
+      }
+    }  
+  }
+
+  else if (CF_Is_Blue) {
+    for (int i = 0; i < (strip.numPixels() / 2); i++) {
+      strip.setPixelColor(i, strip.Color(0, 0, 255));
+    }
+  }
+
+  else {  //must be red
+    for (int i = 0; i < (strip.numPixels() / 2); i++) {
+      strip.setPixelColor(i, strip.Color(255, 0, 0));
+    }
+  }
+  strip.show();
+  BlinkOn = false;
+}
+
+void colorWipeNoDelay(uint32_t color) {
+  for (int i = 0; i < strip.numPixels(); i++) {  // For each pixel in strip...
+    strip.setPixelColor(i, color);               //  Set pixel's color (in RAM)
+    strip.show();                                //  Update strip to match
+  }
+}
+
+bool updateLastRecived() {
+
+  //read everything from the buffer
+  while (Serial.available() > 0) {
+
+    char c = Serial.read();
+
+    if (c == '\n' && charIndex > 0) {
+      //terminate the string, reset index, and return
+      lastRecived[charIndex] = '\0';
+      charIndex = 0;
+      return true;
+
+    } else {
+      //add char to string, increment index
+      lastRecived[charIndex] = c;
+      charIndex += 1;
+    }
+  }
+
+  //no data or still recieving
+  return false;
+}
+
+void captureFlag() {
+  if (distance <= 8 && CF_Done_Changing && CF_Done_Delay) {
+    lastChanged = millis();
+    if (CF_Is_Blue) {
+      CF_Is_Blue = false;
+      Serial.println("Red");
+      CF_Done_Changing = false;
+      CF_Done_Delay = false;
+    } else {
+      CF_Is_Blue = true;
+      Serial.println("Blue");
+      CF_Done_Changing = false;
+      CF_Done_Delay = false;
+    }
+
+  } else if (CF_Done_Changing == false || CF_Done_Delay == false) {
+    unsigned long currentTime = millis();
+    if (!CF_Is_Blue) { colorWipe(strip.Color(255, 0, 0), currentTime); }  //red
+    else {
+      colorWipe(strip.Color(0, 0, 255), currentTime);
+    }  //blue
+  }
+}
+
+void wackMole() {
+  if (distance <= 8) {
+    Serial.println("WM_Point");
+    colorWipeNoDelay(strip.Color(255, 255, 255));
+    strcpy(gameMode, "Idle");
+  }
+}
+
+void altitude() {
+  if (distance > A_Height-6 && distance <= A_Height) {
+    Serial.println("A_Point");
+    colorWipeNoDelay(strip.Color(255, 255, 255));
+    strcpy(gameMode, "Idle");
+  }
+}
+
+void loop() {
+
+  delay(25);
+
+  if (updateLastRecived()) {
+
+    if (strcmp(lastRecived, "Capture_Flag_Start_Blue") == 0) {
+      CF_Is_Blue = true;
+      colorWipeNoDelay(strip.Color(0, 0, 255));  //blue
+      strcpy(gameMode, "Capture_Flag_Waiting");
+    }
+    if (strcmp(lastRecived, "Capture_Flag_Start_Red") == 0) {
+      CF_Is_Blue = false;
+      colorWipeNoDelay(strip.Color(255, 0, 0));  //red
+      strcpy(gameMode, "Capture_Flag_Waiting");
+    }
+    if (strcmp(lastRecived, "GM_Capture_Flag") == 0) {
+      pixelIndex = 0;
+      CF_Done_Changing = true;
+      CF_Done_Delay = true;
+      strcpy(gameMode, "Capture_Flag");
+      if (CF_Is_Blue) {
+        colorWipeNoDelay(strip.Color(0, 0, 255));
+      } else {
+        colorWipeNoDelay(strip.Color(255, 0, 0));
+      }
+    }
+    if (strcmp(lastRecived, "GM_Wack_A_Mole") == 0) {
+      colorWipeNoDelay(strip.Color(0, 255, 0));
+      strcpy(gameMode, "Wack_A_Mole");
+    }
+    if (strcmp(lastRecived, "GM_Altitude_High") == 0) {
+      strcpy(gameMode, "Altitude");
+      A_Height = 18;
+      colorWipeNoDelay(strip.Color(255, 0, 0));
+    }
+    if (strcmp(lastRecived, "GM_Altitude_Medium") == 0) {
+      strcpy(gameMode, "Altitude");
+      A_Height = 12;
+      colorWipeNoDelay(strip.Color(255, 76, 0));
+    }
+    if (strcmp(lastRecived, "GM_Altitude_Low") == 0) {
+      strcpy(gameMode, "Altitude");
+      A_Height = 6;
+      colorWipeNoDelay(strip.Color(255, 153, 0));
+    }
+    if (strcmp(lastRecived, "Idle") == 0) {
+      strcpy(gameMode, "Idle");
+      colorWipeNoDelay(strip.Color(255, 255, 255));
+    }
+    if (strcmp(lastRecived, "Stopped") == 0) {
+      strcpy(gameMode, "Stopped");
+    }
+    if (strcmp(lastRecived, "Get_Version") == 0) {
+      Serial.println(version);
+    }
+    if (strcmp(lastRecived, "Start_Blink") == 0) {
+      Blinking = true;
+    }
+    if (strcmp(lastRecived, "Stop_Blink") == 0) {
+      Blinking = false;
+      blinkOff();
+    }
+    if (strcmp(lastRecived, "Disconnect") == 0) {
+      Blinking = false;
+      blinkOff();
+      CF_Is_Blue = true;
+      colorWipeNoDelay(strip.Color(0, 0, 255));  //blue
+      strcpy(gameMode, "Unconnected");
+    }
+  }
+
+  getDistance();
+
+  if (strcmp(gameMode, "Capture_Flag") == 0 || strcmp(gameMode, "Unconnected") == 0) {
+    captureFlag();
+  }
+  if (strcmp(gameMode, "Wack_A_Mole") == 0) {
+    wackMole();
+  }
+  if (strcmp(gameMode, "Altitude") == 0) {
+    altitude();
+  }
+
+  if (Blinking) {
+    unsigned long currentTime = millis();
+    blink(strip.Color(255, 0, 255), currentTime);
+  }
+}

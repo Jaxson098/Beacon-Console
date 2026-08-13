@@ -222,6 +222,7 @@ const help_html = (
         <li>Set the game length in a [minutes] : [seconds] format</li>
         <li>When "<span className='font-bold'>Start</span>" is clicked an announcer will instruct pilots to get ready, then after a random delay of 0.5-5 seconds a tone will sound and the game will begin. A horn will sound at the games end. Most functionality will be locked until the game ends or "<span className='font-bold'>Stop</span>" is clicked.</li>
         <li>When finished click "<span className='font-bold'>Disconnect All</span>" to return all Beacons to default behavior (Capture Flag). Otherwise they will have powered on and off</li>
+        <li>If you encounter problems connecting and uplaoding firmware to a Beacon please report it, unplug the Beacon, reload the Beacon Console, and try again. You can also try manually uploading the newsest firmware, see "Manual Uploading"</li>
       </ul>
     </details>
 
@@ -251,6 +252,18 @@ const help_html = (
         <li>Once started, 1 or more drones try to trigger all Beacons as fast as possible by flying over them at the correct altitude as designated by the Beacons color.</li>
         <li><span className='bg-yellow-300 px-1'>Yellow</span> indicates an altitude of 6 inches or less, <span className='bg-orange-400 px-1'>Orange</span> indicates an altitude of 6-12 inches, and <span className='bg-red-500 px-1'>Red</span> indicates an altitude of 18 inches or more.</li>
         <li>Successfully triggering a Beacon results in 1 point, once all Beacons are triggered they are assigned a new random height and must be triggered again. This continues until the time is up.</li>
+      </ul>
+    </details>
+
+    <details className='mt-4'>
+      <summary className='font-bold cursor-pointer'>Manual Firmware Uploading</summary>
+      <ul className='text-xs 2xl:text-sm flex flex-col gap-1 list-disc ml-5'>
+        <li>First, please download and install the Arduino IDE, instructions can be found <a href='https://docs.arduino.cc/software/ide-v2/tutorials/getting-started/ide-v2-downloading-and-installing/' className='underline'>here</a>.</li>
+        <li>Then after creating a new sketch, copy and paste the code found <a href='https://Jaxson098.github.io/Beacon-Console/BeaconFirmware.txt' className='underline'>here</a> into it.</li>
+        <li>Use the "Library Manager" in the sidebar to search for and install: "Adafruit NeoPixel".</li>
+        <li>Select the Beacon in the top left as an "Arduino Nano".</li>
+        <li>{`Go to Tools > Proccesor > and select "ATmega328P (Old Bootloader)".`}</li>
+        <li>Click "Upload", if you encounter an error please ensure all other programs that may be using the Beacon are closed (including this one).</li>
       </ul>
     </details>
   </div>
