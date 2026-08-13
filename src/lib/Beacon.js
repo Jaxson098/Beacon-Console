@@ -84,7 +84,7 @@ export class Beacon {
     async update(version, set_connecting_stack) {
         // set_connect_msg("Checking Firmware Version...")
         if (await this.checkVersion(version)) {
-            return
+            return true
         } else {
 
             set_connecting_stack(prev => {
@@ -121,10 +121,11 @@ export class Beacon {
             
                 await stk.leaveProgrammingMode(); // Arduino will now run the new sketch
                 await new Promise(resolve => setTimeout(resolve, 1500)); //wait to boot again
-                return
+                return true
             } catch (err) {
                 console.log("uploading err:")
                 console.log(err)
+                return false
             }
         }
     }

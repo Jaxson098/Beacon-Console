@@ -53,10 +53,24 @@ function App() {
   async function handleConnect() {
     set_connecting(true)
     set_connect_msg("Select a Beacon")
-    const port = await navigator.serial.requestPort({filters: [{ usbProductId: 29987, usbVendorId: 6790 }]}); // browser popup to pick the Arduino
+
+    let port = null
+
+    try {
+      port = await navigator.serial.requestPort({filters: [{ usbProductId: 29987, usbVendorId: 6790 }]}); // browser popup to pick the Arduino
+    } catch (err) {
+      console.log(err)
+      set_connect_msg("Connecting...")
+      set_connecting(false)
+      set_connect_msg("Connect Beacon")
+      return
+    }
+
     set_connect_msg("Connecting...")
     set_connecting(false)
     set_connect_msg("Connect Beacon")
+
+
 
     //if not open
     if (!port.readable && !port.writable) {
@@ -86,7 +100,20 @@ function App() {
 
         beacon.startReading(set_global_buffer)
 
-        beacon.update("v0.1.6",set_connecting_stack).then(async ()=>{
+        beacon.update("v0.1.6",set_connecting_stack).then(async (successful)=>{
+
+          if (!successful) {
+            try {
+              set_connecting_stack(prev => {
+                const copy = [...prev]
+                copy.pop()
+                return copy
+              })
+              beacon.port.close()
+            } catch (err) {
+              console.log(err)
+            }
+          }
 
           if (beacon.readingFlag == false) {beacon.startReading(set_global_buffer)}
 
